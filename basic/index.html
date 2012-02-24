@@ -17,8 +17,7 @@
     <section id="demo">
     <p><b>Requirements:</b> This demo uses <a href="http://dev.w3.org/html5/eventsource/">server-sent events</a>. If it doesn't work in your browser, upgrade or switch. <a href="http://caniuse.com/#search=server">Current browser support</a>.</p>
 
-
-    <p>The box below will update every two seconds with the server&#8217;s current time. The interval is being set by the server.</p>
+    <p>The box below will update every two seconds with the server&#8217;s current time. The interval is being set by the URL.</p>
 
     <p><button>Close the connection</button></p>
 
@@ -43,9 +42,9 @@
 	var es = new EventSource('./send.php');
 
 	onopen = function(e){
-		var inc = incoming;
-        var p = document.createElement('p');
-        var txt = document.createTextNode('Connection opened.');
+		var inc = incoming,
+		    p = document.createElement('p'),
+		    txt = document.createTextNode('Connection opened.');
         p.appendChild(txt);
         inc.appendChild(p);
     }
@@ -55,17 +54,11 @@
 		e.target.disabled = true;
 	}
 	onmessage = function(e){
-        var inc = incoming;
-        var p = document.createElement('p');
-        var txt = document.createTextNode(e.data);
-
+        var inc = incoming,
+            p = document.createElement('p'),
+            txt = document.createTextNode(e.data);
         p.appendChild(txt);
-
-        if( inc.firstElementChild == null ){
-            inc.appendChild(p);
-        } else {
-            inc.insertBefore(p,inc.firstElementChild);
-        }
+        inc.insertBefore(p,inc.firstElementChild);
 	}
 
 	btn.addEventListener('click',closeconnection);
