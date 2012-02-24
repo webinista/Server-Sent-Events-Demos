@@ -8,7 +8,7 @@ function doit($data, $event = null, $id = null, $retry = null){
     if( empty($data) ){
         throw new Exception("Parameter 1 can't be null.");
     } else {
-        print 'data: '.filter_var($data,FILTER_SANITIZE_SPECIAL_CHARS).PHP_EOL;
+        print 'data: '.filter_var($data,FILTER_SANITIZE_STRING,  array('flags'=>FILTER_FLAG_NO_ENCODE_QUOTES,FILTER_FLAG_ENCODE_LOW,FILTER_FLAG_ENCODE_HIGH) ).PHP_EOL;
     }
 
     if( !empty($id) ){
