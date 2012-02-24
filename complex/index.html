@@ -37,11 +37,12 @@
 
 <script>
 (function(){
+    var es, onopen, onerror, onmessage, onodd, oneven, closeconnection, update;
 	var incoming = document.getElementById('incoming'),
 	    form = document.getElementsByTagName('form')[0],
 	    btn = document.getElementsByTagName('button')[0];
 
-	var update = function(addto, addtext){
+	update = function(addto, addtext){
 
 		var p = document.createElement('p'),
 		    firstp = addto.firstElementChild;
@@ -51,20 +52,20 @@
 		addto.insertBefore(p,firstp);
 	}
 
-	var es = new EventSource('./send.php');
+	es = new EventSource('./send.php');
 
-	var onopen = function(e){
+    onopen = function(e){
 	    var inc = incoming;
 		update( inc, 'Connection opened.');
 	}
 
-	var onerror = function(e){
+	onerror = function(e){
 		if( e.target.readyState == 2 ){
 			e.target.close();
 		}
 	}
 
-	var closeconnection = function(e){
+	closeconnection = function(e){
 		if( e.target.hasAttribute('disabled') == false){
 			es.close();
 			e.target.setAttribute('disabled','disabled');
@@ -75,17 +76,17 @@
 	 This function will never be called because we never
 	 receive a message event.
 	*/
-	var onmessage = function(e){
+	onmessage = function(e){
 	    update( incoming, 'Message event sent!');
 	}
 
-	var oneven = function(e){
+	oneven = function(e){
         var text;
         text = e.data + ' is an EVEN number.';
         text += ' Its square root is ' + Math.sqrt(e.data)+'.';
         update( incoming, text );
 	}
-	var onodd = function(e){
+	onodd = function(e){
 		var text = e.data + ' is ODD.';
 		update( incoming, text );
 	}
