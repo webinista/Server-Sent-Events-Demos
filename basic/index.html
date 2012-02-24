@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,user-scalable=yes">
+	<title>Server-sent events: A basic example</title>
+	<link rel="stylesheet" href="../fonts/gudea/stylesheet.css" media="screen">
+	<link rel="stylesheet" href="../styles/s.css" media="screen">
+	</head>
+<body>
+
+<nav><a href="../">Server-sent event demos</a></nav>
+
+<article>
+    <h1>What time is it?</h1>
+
+    <section id="demo">
+    <p><b>Requirements:</b> This demo uses <a href="http://dev.w3.org/html5/eventsource/">server-sent events</a> and <a href="http://dev.w3.org/html5/spec/elements.html#dom-classlist">classList</a> (also known as DOMTokenList). If it doesn't work in your browser, upgrade or switch. The latest versions of <a href="http://www.opera.com/download/">Opera</a>, <a href="http://www.google.com/chrome">Chrome</a>/<a href="http://www.chromium.org/Home">Chromium</a>, <a href="http://www.apple.com/safari/">Safari</a>, and <a href="http://www.mozilla.org/en-US/firefox/new/?from=getfirefox">Firefox</a> support these features.</p>
+
+
+    <p>The box below will update periodically with the server&#8217;s current time. The default interval is set by the user agent, and ranges from about 3-6 seconds, depending on the browser.</p>
+
+    <p><button>Close the connection</button></p>
+
+
+    <div id="incoming"></div>
+
+    </section>
+</article>
+
+<footer>
+<p><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br />This <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" rel="dct:type">work</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+</footer>
+
+
+<script>
+(function(){
+	var closeconnetion, onopen, onmessage;
+	var incoming = document.getElementById('incoming'),
+	    form     = document.getElementsByTagName('form')[0],
+	    btn      = document.getElementsByTagName('button')[0];
+
+	var es = new EventSource('./send.php');
+
+	onopen = function(e){
+		incoming.classList.add('slider');
+	}
+	closeconnection = function(e){
+		es.close();
+		e.target.removeEventListener('click',closeconnection);
+		e.target.disabled = true;
+	}
+	onmessage = function(e){
+        var inc = incoming;
+        var p = document.createElement('p');
+        var txt = document.createTextNode(e.data);
+
+        p.appendChild(txt);
+
+        if( inc.firstElementChild == null ){
+            inc.appendChild(p);
+        } else {
+            inc.insertBefore(p,inc.firstElementChild);
+        }
+	}
+
+	btn.addEventListener('click',closeconnection);
+	es.addEventListener('open',onopen);
+	es.addEventListener('message',onmessage);
+
+})();
+</script>
+
+
+</body>
+</html>
+
