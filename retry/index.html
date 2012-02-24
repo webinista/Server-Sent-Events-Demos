@@ -25,6 +25,8 @@
 
         <p><b>Note:</b> The <code>retry</code> field only has an effect if the server closes the connection. A connection might close if a script finishes executing and sends an end-of-file token to the client, as is the case here.</p>
 
+        <p>When an end-of-file token is received, an <code>error</code> event will be fired. In this case, because we are sending a retry interval, the browser will reconnect after waiting the specified number of seconds.</p>
+
        <p><button>Close connection</button></p>
 
        <div id="incoming"></div>
