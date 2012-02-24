@@ -54,12 +54,11 @@ footer img{
     vertical-align:top
 }
 
-article,footer{
+article, footer{
     width: 50rem;
     margin: auto;
 }
 article{
-    width: 50rem;
     padding: 1.5rem 0;
 }
 
@@ -78,7 +77,6 @@ a:link{
 a:visited{color:#004;}
 a:hover{color:#b00;}
 
-
 #incoming{
 	font-family: monospace;
 	font-size: 1.5em;
@@ -88,11 +86,6 @@ a:hover{color:#b00;}
 	padding: 10px;
 	border-radius: .2em;
 	border-radius: .25rem;
-	-o-transition: background-color 500ms linear;
-	-moz-transition: background-color 500ms linear;
-	-khtml-transition: background-color 500ms linear;
-	-ms-transition: background-color 500ms linear;
-	-webkit-transition: background-color 500ms linear;
 	height: 20em;
 	height: 20rem;
 	overflow-y:scroll;
