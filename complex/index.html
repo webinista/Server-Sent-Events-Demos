@@ -54,7 +54,7 @@
 	var es = new EventSource('./send.php');
 
 	var onopen = function(e){
-	    var inc = incoming
+	    var inc = incoming;
 		update( inc, 'Connection opened.');
 	}
 
