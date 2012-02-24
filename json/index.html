@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,user-scalable=yes">
+	<title>Server-sent events: Sending JSON-formatted data</title>
+	<link rel="stylesheet" href="../fonts/gudea/stylesheet.css" media="screen">
+	<link rel="stylesheet" href="../styles/s.css" media="screen">
+</head>
+<body>
+
+<nav><a href="/tiffanyb/">View all demos</a> &rarr; <a href="../">Server-sent event demos</a></nav>
+
+    <article>
+
+
+    <h1>Sending JSON-formatted data</h1>
+
+        <section id="demo">
+         <p><b>Requirements:</b> This demo uses <a href="http://dev.w3.org/html5/eventsource/">server-sent events</a>. If it doesn't work in your browser, upgrade or switch. <a href="http://caniuse.com/#search=eventsource">Current browser support</a>.</p>
+
+         <p>In the example below, we are receiving JSON-formatted data from our server, and parsing it in our script.</p>
+
+         <p>Data is being sent from the server every two seconds. Each time the script completes, the browser will wait a few seconds before it reconnects.</p>
+
+        <div id="incoming"></div>
+
+        </section>
+    </article>
+<footer>
+<p><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br />This <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" rel="dct:type">work</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+<p><b>Published:</b> 24 October 2011.
+<b>Last updated:</b> <?php echo date('j F Y.',filemtime(__file__) ); ?>
+</p>
+</footer>
+
+
+<script>
+(function(){
+	var closeconnetion, onopen, onmessage, es;
+	var incoming = document.getElementById('incoming'),
+	    form = document.getElementsByTagName('form')[0],
+
+	es = new EventSource('./send.php');
+
+	onopen = function(e){
+	    var inc = incoming,
+	        p = document.createElement('p'),
+	        txt = document.createTextNode('Reconnecting...');
+
+        p.setAttribute('class','connecting');
+	    p.appendChild(txt);
+	    inc.insertBefore(p,inc.firstElementChild);
+	}
+
+	closeconnection = function(e){
+		es.close();
+		e.target.removeEventListener('click',closeconnection);
+		e.target.disabled = true;
+	}
+	onmessage = function(e){
+	 	var inc = incoming,
+	        p = document.createElement('p'),
+	        txt = document.createTextNode(e.data);
+
+	    p.appendChild(txt);
+	    inc.appendChild(p);
+	}
+	onmakes = function(e){
+	 	var data = JSON.parse( e.data ),
+	 	    inc = incoming,
+	 	    x,
+	 	    txt,
+	 	    p,
+	 	    make,
+	 	    b,
+	 	    str;
+
+        for( x in data ){
+            make = document.createTextNode(x);
+            b = document.createElement('b');
+            b.appendChild(make);
+            str  = ' makes the following car models: ';
+            str += data[x].join(', ');
+            str += '.';
+        }
+
+        txt = document.createTextNode(str);
+        p = document.createElement('p');
+        p.appendChild(b);
+        p.appendChild(txt);
+	    inc.insertBefore(p,inc.firstElementChild);
+
+	}
+
+	es.addEventListener('open',onopen);
+	es.addEventListener('makes',onmakes);
+
+})();
+</script>
+
+
+</body>
+</html>
+
