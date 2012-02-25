@@ -264,22 +264,18 @@ $country[256] = "Zimbabwe";
 
 $num = count($country);
 
-if( ctype_digit($_SERVER['HTTP_LAST_EVENT_ID']) ){
-    doit('--- We left off at event #'.$_SERVER['HTTP_LAST_EVENT_ID'].' ---','reconnect');
-
-    $i = $_SERVER['HTTP_LAST_EVENT_ID']+1;
+if( $_SERVER['HTTP_LAST_EVENT_ID'] ){
+   doit('--- We left off at event #'.$_SERVER['HTTP_LAST_EVENT_ID'].' ---','reconnect');
+      $i = $_SERVER['HTTP_LAST_EVENT_ID'] + 1;
     $end = $_SERVER['HTTP_LAST_EVENT_ID'] + 10;
-
-    while($i < $end ){
-        doit($country[$i],null,(string)$i,5000);
-        sleep(1);
-        $i++;
-    }
 } else {
-    $i = 0;
-    while($i < 10){
-        doit($country[$i],null,(string)$i,5000);
-        sleep(1);
-        $i++;
-    }
+      $i = 0;
+    $end = 10;
 }
+
+while($i < $end){
+    doit($country[$i],null,$i,5000);
+    sleep(1);
+    $i++;
+}
+

@@ -27,6 +27,8 @@
 
     <p>When it reconnects, the browser will include a <code>Last-Event-ID</code> header. Think of the <code>Last-Event-ID</code> as a placeholder of sorts. If a <code>Last-Event-ID</code> header has been sent, we will re-start our stream with the next item in our queue.</p>
 
+    <p>There are 257 events total in the queue. When they have all been dispatched, the connection will close.</p>
+
     <p><button>Stop polling</button></p>
 
     <div id="incoming"></div>
