@@ -61,9 +61,9 @@
         inc.insertBefore(p,inc.firstElementChild);
 	}
 
-	btn.addEventListener('click',closeconnection);
-	es.addEventListener('open',onopen);
-	es.addEventListener('message',onmessage);
+	btn.addEventListener('click',closeconnection,false);
+	es.addEventListener('open',onopen,false);
+	es.addEventListener('message',onmessage,false);
 
 })();
 </script>
