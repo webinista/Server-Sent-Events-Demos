@@ -275,7 +275,6 @@ if( ctype_digit($_SERVER['HTTP_LAST_EVENT_ID']) ){
         sleep(1);
         $i++;
     }
-
 } else {
     $i = 0;
     while($i < 10){
@@ -283,5 +282,4 @@ if( ctype_digit($_SERVER['HTTP_LAST_EVENT_ID']) ){
         sleep(1);
         $i++;
     }
-
 }
