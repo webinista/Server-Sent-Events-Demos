@@ -144,6 +144,4 @@ button:disabled{
 	border: none;
 }
 
-p.connecting{
-    padding: 3em 0;
-}
+p.connecting{padding: 3em 0;}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,user-scalable=yes">
+	<title>Server-sent events: Sending an event ID</title>
+	<link rel="stylesheet" href="../fonts/gudea/stylesheet.css" media="screen">
+	<link rel="stylesheet" href="../styles/s.css" media="screen">
+	<style>
+	.blink{text-decoration:blink;}
+	</style>
+</head>
+<body>
+
+<nav><a href="../">Server-sent event demos</a></nav>
+
+<article>
+    <h1>Sending an event ID</h1>
+
+    <section id="demo">
+    <p><b>Requirements:</b> This demo uses <a href="http://dev.w3.org/html5/eventsource/">server-sent events</a>. If it doesn't work in your browser, upgrade or switch. <a href="http://caniuse.com/#search=eventsource">Current browser support</a>.</p>
+
+    <p>In this example, we are sending an event every second. Each event has an <code>id</code> attached, and a <code>retry</code> interval set.
+    </p>
+
+    <p>After 10 events, the stream will stop sending events. The browser will then wait 5 seconds &#8212; the length of the <code>retry</code> interval &#8212; before reconnecting.</p>
+
+    <p>When it reconnects, the browser will include a <code>Last-Event-ID</code> header. Think of the <code>Last-Event-ID</code> as a placeholder of sorts. If a <code>Last-Event-ID</code> header has been sent, we will re-start our stream with the next item in our queue.</p>
+
+    <p><button>Stop polling</button></p>
+
+    <div id="incoming"></div>
+
+    </section>
+</article>
+
+<footer>
+<p><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br />This <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" rel="dct:type">work</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</p>
+</footer>
+
+
+<script>
+(function(){
+	var incoming = document.getElementById('incoming'),
+	    form = document.getElementsByTagName('form')[0],
+	    btn = document.getElementsByTagName('button')[0];
+
+    var es, closeconnection, onerror, onreadystatechange, onmessage;
+
+    es = new EventSource('./send.php');
+
+	closeconnection = function(e){
+		es.close();
+		e.target.removeEventListener('click',closeconnection);
+		e.target.disabled = true;
+		console.log( es );
+	}
+
+	onerror = function(e){
+	    var inc = incoming,
+	        p = document.createElement('p'),
+	        txt;
+
+	    if( e.target.readyState == 0 ){
+	        txt = document.createTextNode('Reconnecting...');
+	    }
+	    p.setAttribute('class','connecting');
+	    p.appendChild(txt);
+        inc.insertBefore(p,inc.firstElementChild);
+	}
+
+	onreadystatechange = function(e){
+	     console.log( e.target.readyState );
+	}
+
+    onreconnect = function(e){
+	    var inc = incoming,
+	        p = document.createElement('p'),
+	        txt = document.createTextNode(e.data);
+        p.appendChild(txt);
+        inc.insertBefore(p,inc.firstElementChild);
+    }
+
+	onmessage = function(e){
+	    var inc = incoming,
+	        p = document.createElement('p'),
+	        txt = document.createTextNode( (e.lastEventId*1)+': '+e.data );
+        p.appendChild(txt);
+        inc.insertBefore(p,inc.firstElementChild);
+    }
+
+	btn.addEventListener('click',closeconnection,false);
+	es.addEventListener('error',onerror,false);
+	es.addEventListener('reconnect',onreconnect,false);
+	es.addEventListener('message',onmessage,false);
+
+
+})();
+</script>
+
+
+</body>
+</html>
+
